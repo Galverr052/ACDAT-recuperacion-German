@@ -41,15 +41,28 @@ public class ws {
     @GetMapping("/dado/lanzar/jugada")
     @ResponseBody
     public String jugada () {
+        int [] numeros = new int[5];
+        boolean iguales = true;
 
-        for (int i = 0; i <= 5; i++) {
-            int numero = (int)Math.random() * (7 - 1) + 1;
+        for (int i = 0; i < 5; i++) {
+            numeros[i] = (int)(Math.random() * 5) + 1;
         }
 
-        if(){
-
+        for (int i = 1; i < numeros.length; i++){
+            if (numeros[i] !=numeros[0]){
+                iguales = false;
+                break;
+            }
         }
+
+        String resultado = "";
+
+        for (int n : numeros){
+            resultado += n + " ";
+        }
+
+        if (iguales){
+            return "Ganaste!!!" + resultado;
+        } else return resultado;
     }
-
-
 }
