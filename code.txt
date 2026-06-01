@@ -1,0 +1,391 @@
+
+https://codeshare.io/29nb31
+==============================
+Clase serialización con Spring
+==============================
+
+@GetMapping(value = "/persona", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseBody
+  public Persona getPersona() {
+      return new Persona("manolo", "sosa", 45);
+
+      /*
+      Devuelve:
+          {"nombre": "manolo", "apellidos": "sosa", "edad": 45}
+       */
+  }
+
+  @GetMapping(value = "/persona/xml", produces = MediaType.APPLICATION_XML_VALUE)
+  @ResponseBody
+  public Persona getPersonaXML() {
+      return this.personas.get(0);
+
+      /* Devuelve:
+          <persona><nombre>silvia</nombre><apellidos>martín</apellidos><edad>15</edad></persona>
+       */
+  }
+
+
+
+/* EJ0 iniciales */
+GET, formato JSON
+public List<Persona> getPersonas()
+
+ @GetMapping(value = "/listaPersonasJSON", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Persona> getPersonasJSON() {
+        return personas;
+    }
+
+
+GET, formato XML
+public List<Persona> getPersonasXML()
+
+@GetMapping(value = "/listaPersonasXML", produces = MediaType.APPLICATION_XML_VALUE)
+    @ResponseBody
+    public List<Persona> getPersonasXML() {
+        return personas;
+    }
+
+
+/*
+ * EJ1:
+ * Calcular a partir de un parámetro de nombre de persona, pasado por GET, para que devuelva:
+ * los datos de la persona en formato JSON.
+ *
+ * Ejemplo:
+ * http://localhost:8080/ws/personas/busca?nombre=ana
+ *
+ * Devuelve:
+		{"nombre": "ana", "apellidos": "martínez", "edad": 34}
+ *
+ */
+ 
+ Raul 
+ @GetMapping(value = "/busca", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Persona getPersonaNom(@RequestParam String nombre) {
+        boolean encontrado = false;
+        Persona persona = null;
+
+        Iterator it = personas.iterator();
+
+        while (!encontrado && it.hasNext()) {
+            persona = (Persona) it.next();
+
+            if (persona.getNombre().equals(nombre))
+                encontrado = true;
+        }
+
+				//return encontrado ? persona: null;
+
+        if (encontrado)
+            return persona;
+        else
+            return null;
+    }
+ 
+
+ 
+ 
+ Diego
+@GetMapping(value = "/busca", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Persona buscaPersona(@RequestParam String nombre) {
+        return personas.stream()
+                .filter(p -> p.getNombre().equalsIgnoreCase(nombre))
+                .findFirst()
+                .orElse(null);
+    }
+ 
+ 
+
+/*
+ * EJ2:
+ * Devolver, a partir de la siguiente petición GET, las personas mayores de edad en formato XML.
+ *
+ * Ejemplo:
+ * http://localhost:8080/ws/personas/mayores
+ */
+ 
+ Raul:
+ 
+  @GetMapping(value = "/mayores", produces = MediaType.APPLICATION_XML_VALUE)
+    @ResponseBody
+    public List<Persona> getMayoresEdad() {
+
+        List<Persona> mayoresEdad = new ArrayList<>();
+
+        for (Persona p: personas) {
+
+            if (p.getEdad() >= 18){
+                mayoresEdad.add(p);
+            }
+        }
+
+        return mayoresEdad;
+    }
+ 
+ 
+ /*
+ * EJ3:
+ * Devolver, a partir de la siguiente petición POST, la persona mayor de la lista en formato JSON.
+ *
+ * Ejemplo:
+ * http://localhost:8080/ws/personas/mayor
+ */
+
+
+
+/*
+ * EJ4:
+ * Calcular a partir de un parámetro, pasado por GET, para que devuelva:
+ * la lista de personas ordenada o no por su edad o nombre en formato XML.
+ *
+ * Ejemplo:
+ * http://localhost:8080/ws/personas/listapersonas?orden=edad
+ * http://localhost:8080/ws/personas/listapersonas?orden=nombre
+ *
+ */
+
+
+/*
+ * EJ5: Búsqueda por coincidencia parcial e ignorando mayúsculas
+ * A partir de una petición GET con un parámetro 'termino', buscar personas cuyo apellido 
+ * contenga ese texto, sin importar si se escribe en mayúsculas o minúsculas.
+ * Devuelve la lista en formato JSON.
+ *
+ * Ejemplo:
+ * http://localhost:8080/ws/personas/autocompletar?termino=gomez
+ * http://localhost:8080/ws/personas/autocompletar?termino=An
+ * (Debería devolver a "Ana Martínez", "Antonio Silva", etc.)
+ */
+
+/*
+ * EJ6: Filtrado por rango y formato XML
+ * Calcular a partir de dos parámetros pasados por GET ('min' y 'max'), para que devuelva:
+ * la lista de personas cuya edad esté en ese rango (ambos inclusive) en formato XML.
+ *
+ * Ejemplo:
+ * http://localhost:8080/ws/personas/rango?min=20&max=40
+ */
+ 
+ /*
+ * EJ7: Estadísticas
+ * Devolver, a partir de la siguiente petición POST, los datos estadísticos en formato JSON
+ * del conjunto global de personas (total de personas, media de edad y la edad máxima).
+ *
+ * Ejemplo:
+ * http://localhost:8080/ws/personas/estadisticas
+ *
+ * Devuelve:
+ * {"total": 5, "edadMedia": 38.5, "edadMaxima": 89}
+ */
+ 
+ 
+ /*
+ * EJ8: Filtrado combinado
+ * A partir de una petición GET, permitir filtrar de manera opcional por apellido (coincidencia parcial) Y/O por edad máxima. 
+ * Si no se envía el apellido, no se filtra por texto. Si no se envía la edad máxima, se asume que no hay límite. 
+ * Devolver la lista en formato XML.
+ * Ejemplo:
+ * http://localhost:8080/ws/personas/buscar?apellido=silva&edadmax=30
+ * (Devuelve personas que se apelliden Silva y tengan 30 años o menos).
+ */
+
+
+
+
+
+
+1)
+German
+@PostMapping("/ex/hora")
+    @ResponseBody
+    public String hora (){
+        LocalTime hora = LocalTime.now();
+
+        return hora.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
+
+
+Diego
+no lo ha hecho
+
+Raul
+
+//http://localhost:8081/ws1/ex/hora
+    @GetMapping("/ex/hora")
+    @ResponseBody
+    public String hora(){
+
+        LocalTime hora = LocalTime.now();
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String tiempoFormateado = hora.format(formato);
+
+        return tiempoFormateado;
+    }
+
+2)
+German
+	@GetMapping("ex/numeros")
+    @ResponseBody
+    public String numeros(@RequestParam int min, @RequestParam int max){
+
+    }
+
+
+Diego
+no lo ha hecho
+
+Raul
+@GetMapping("/ex/nveces")
+    @ResponseBody
+    public String secuencia(@RequestParam int min, @RequestParam int max) {
+
+        if (min > max){
+            return "El parámetro minimo debe ser menor o igual al máximo";
+        }
+
+        int[] numeros = new int[(max - min) + 1];
+
+        for (int i = 0; i < numeros.length; i++) {
+            numeros[i] = i + min;
+        }
+
+            return Arrays.toString(numeros);
+    }
+
+3)
+German
+
+@GetMapping(value = "ex/nveces",  produces = "application/xml")
+    @ResponseBody
+    public String frase(@RequestParam String frase) {
+
+        StringBuilder xml = new StringBuilder();
+        xml.append("<lista>");
+
+        String procesados = "";
+
+        for (char c : frase.toCharArray()) {
+
+            if (procesados.indexOf(c) == -1) {
+                int count = 0;
+
+                for (char x : frase.toCharArray()) {
+                    if (x == c) count++;
+                }
+
+                xml.append("<caracter>");
+                xml.append("<simbolo>").append(c).append("</simbolo>");
+                xml.append("<nveces>").append(count).append("</nveces>");
+                xml.append("</caracter>");
+
+                procesados += c;
+            }
+        }
+
+        xml.append("</lista>");
+        return xml.toString();
+    }
+
+
+Resultado:
+
+http://localhost:8081/ws/ex/nveces?frase=abcabc3fggg
+
+
+<lista>
+<caracter>
+<simbolo>a</simbolo>
+<nveces>2</nveces>
+</caracter>
+<caracter>
+<simbolo>b</simbolo>
+<nveces>2</nveces>
+</caracter>
+<caracter>
+<simbolo>c</simbolo>
+<nveces>2</nveces>
+</caracter>
+<caracter>
+<simbolo>3</simbolo>
+<nveces>1</nveces>
+</caracter>
+<caracter>
+<simbolo>f</simbolo>
+<nveces>1</nveces>
+</caracter>
+<caracter>
+<simbolo>g</simbolo>
+<nveces>3</nveces>
+</caracter>
+</lista>
+
+
+
+Diego:
+no lo ha hecho
+
+Raul:
+
+// <server>/ws/ex/nvecesCaract?frase=a3$3Ab
+    @GetMapping(value = "/ex/nvecesCaract", produces = MediaType.APPLICATION_XML_VALUE)
+    @ResponseBody
+    public List<Caracter> contar(@RequestParam String frase) {
+
+        Map<Character, Integer> contador = new LinkedHashMap<>(); //linkedHashMap porque guarda el orden de inserción a diferencia de HashMap
+
+        // Contar caracteres
+        for (int i = 0; i < frase.length(); i++) {
+            char c = frase.charAt(i);
+
+                if (contador.containsKey(c)) {
+                    contador.put(c, contador.get(c) + 1);
+                } else {
+                    contador.put(c, 1);
+                }
+        }
+
+        // Paso de Map a List
+        List<Caracter> resultado = new ArrayList<>();
+
+        for (Map.Entry<Character, Integer> entry : contador.entrySet()) {
+            resultado.add(
+                    new Caracter(
+                            String.valueOf(entry.getKey()),
+                            entry.getValue()
+                    )
+            );
+        }
+
+        return resultado;
+    }
+    
+    <List>
+	<item>
+		<simbolo>a</simbolo>
+		<nveces>1</nveces>
+	</item>
+	<item>
+		<simbolo>3</simbolo>
+		<nveces>2</nveces>
+	</item>
+	<item>
+		<simbolo>$</simbolo>
+		<nveces>1</nveces>
+	</item>
+	<item>
+		<simbolo>A</simbolo>
+		<nveces>1</nveces>
+	</item>
+	<item>
+		<simbolo>b</simbolo>
+		<nveces>1</nveces>
+	</item>
+</List>
+
+
+
