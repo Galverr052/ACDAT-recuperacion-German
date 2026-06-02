@@ -25,19 +25,19 @@ public class Persona {
         this.nombre = nombre;
     }
 
-    public String getapellido() {
-        return apellido;
-    }
-
-    public void setapellido(String apellido) {
-        apellido = apellido;
-    }
-
     public int getEdad() {
         return edad;
     }
 
     public void setEdad(int edad) {
         this.edad = edad;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 }

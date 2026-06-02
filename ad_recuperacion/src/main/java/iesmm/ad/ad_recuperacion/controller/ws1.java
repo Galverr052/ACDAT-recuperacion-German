@@ -21,30 +21,22 @@ public class ws1 {
 
     @GetMapping("ex/numeros")
     @ResponseBody
-    public String numeros(@RequestParam int min, @RequestParam int max){
+    public String numeros(@RequestParam int min, @RequestParam int max) {
 
-        int [] numeros = new int[max - min + 1];
-        int n = 0;
-
-        for (int i = min ; i < max + 1; i++) {
-            numeros[n] = i;
-            n++;
-        }
         String resultado = "[ ";
 
-        int x = 0;
+        for (int i = min; i <= max; i++) {
+            resultado += i;
 
-        for (int numero : numeros) {
-            resultado += numero;
-
-            if (x < numeros.length - 1) {
-                resultado += ",";
+            if (i < max) {
+                resultado
+                        += ", ";
             }
-
-            x++;
         }
 
-        return resultado + "]";
+        resultado += " ]";
+
+        return resultado;
     }
 
     @GetMapping(value = "ex/nveces",  produces = "application/xml")
@@ -54,11 +46,11 @@ public class ws1 {
         StringBuilder xml = new StringBuilder();
         xml.append("<lista>");
 
-        String Procesados = "";
+        String procesados = "";
 
         for (char c : frase.toCharArray()) {
 
-            if (Procesados.indexOf(c) == -1) {
+            if (procesados.indexOf(c) == -1) {
                 int count = 0;
 
                 for (char x : frase.toCharArray()) {
@@ -70,12 +62,14 @@ public class ws1 {
                 xml.append("<nveces>").append(count).append("</nveces>");
                 xml.append("</caracter>");
 
-                Procesados += c;
+                procesados += c;
             }
         }
 
         xml.append("</lista>");
         return xml.toString();
     }
+
+
 
 }
