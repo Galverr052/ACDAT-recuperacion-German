@@ -1,0 +1,4 @@
+Referencia CUPS: ES0022105511819019MK3F - Consumo Total (kWh): 2011.30 
+Referencia CUPS: ES0031105511819012LM0G - Consumo Total (kWh): 1292.69 
+Referencia CUPS: ES0031105511819013KF1L - Consumo Total (kWh): 2011.30 
+Referencia CUPS: ES0031105511811032KD2N - Consumo Total (kWh): 2758.61 
