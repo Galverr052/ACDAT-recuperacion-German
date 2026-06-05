@@ -29,7 +29,7 @@ public class GestionaClientes {
                 String line;
                 while ((line = br.readLine()) != null) {
                     //Si comineza con # se omite
-                    if (line.startsWith("#")) {
+                    if (line.startsWith("#")) { // No realizar instrucciones de continue, remodificar la estructura
                         continue;
                     }
                     //Obtengo los datos del csv por partes separadas por el punto y coma
@@ -187,7 +187,7 @@ public class GestionaClientes {
 
                 while ((line = br.readLine()) != null){
                     if (line.startsWith("#")){
-                        continue;
+                        continue;  // No realizar instrucciones de continue, remodificar la estructura
                     }
 
                     String[] data = line.split(";");
@@ -212,7 +212,7 @@ public class GestionaClientes {
                 while ((line = br.readLine()) != null) {
 
                     if (line.startsWith("#")) {
-                        continue;
+                        continue;  // No realizar instrucciones de continue, remodificar la estructura
                     }
 
                     String[] data = line.split(";");
@@ -266,7 +266,7 @@ public class GestionaClientes {
                 while ((line = br.readLine()) != null) {
 
                     if (line.startsWith("#")) {
-                        continue;
+                        continue;  // No realizar instrucciones de continue, remodificar la estructura
                     }
 
                     String[] data = line.split(";");
@@ -278,7 +278,7 @@ public class GestionaClientes {
                         String apellido = data[3];
 
                         Cliente cliente = new Cliente(nif,nombre,apellido,fechaAlta,new ArrayList<>());
-                        for (Contador c : contadores) {
+                        for (Contador c : contadores) { 
                             if (c.getNif().equals(nif)) {
                                 cliente.addContador(c);
                             }
