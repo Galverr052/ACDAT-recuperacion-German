@@ -45,6 +45,7 @@ public class GestionaClientes {
                         System.err.println("Error de conversión");
                     }
                 }
+                //cierro el buffer reader
                 br.close();
 
                 PrintWriter pw = new PrintWriter(new FileWriter(fresult));

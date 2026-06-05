@@ -155,7 +155,7 @@ public class ws2 {
     }
 
 
-    // 🔠 8. FRECUENCIA DE UNA LETRA CON MAP
+    //  FRECUENCIA DE UNA LETRA CON MAP
 
     @GetMapping("/frecuencia")
     @ResponseBody
@@ -209,4 +209,82 @@ public class ws2 {
 
         return "Vocales: " + count;
     }
+
+    @GetMapping("/cambiar/vocal")
+    @ResponseBody
+    public String cambiarVocal(
+            @RequestParam String frase,
+            @RequestParam char vocal) {
+
+        String resultado = "";
+
+        for (char c : frase.toCharArray()) {
+
+            if ("aeiouAEIOU".indexOf(c) >= 0) {
+                resultado += vocal;
+            } else {
+                resultado += c;
+            }
+        }
+
+        return resultado;
+    }
+
+    @GetMapping("/vocales/todas")
+    @ResponseBody
+    public String vocalesTodas(@RequestParam String frase) {
+
+        String vocales = "aeiou";
+
+        String resultado = "";
+
+        for (char v : vocales.toCharArray()) {
+
+            String nueva = "";
+
+            for (char c : frase.toCharArray()) {
+
+                if ("aeiouAEIOU".indexOf(c) >= 0) {
+                    nueva += v;
+                } else {
+                    nueva += c;
+                }
+            }
+
+            resultado += nueva + "<br>";
+        }
+
+        return resultado;
+    }
+
+    @GetMapping("/orden-mayor-menor")
+    @ResponseBody
+    public String ordenMayorMenor(@RequestParam int numero) {
+
+        String texto = String.valueOf(numero);
+
+        char mayor = texto.charAt(0);
+        char menor = texto.charAt(0);
+
+        for (char c : texto.toCharArray()) {
+
+            if (c > mayor) {
+                mayor = c;
+            }
+
+            if (c < menor) {
+                menor = c;
+            }
+        }
+
+        int posMayor = texto.indexOf(mayor);
+        int posMenor = texto.indexOf(menor);
+
+        if (posMayor < posMenor) {
+            return mayor + "," + menor;
+        }
+
+        return menor + "," + mayor;
+    }
+
 }
