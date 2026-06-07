@@ -30,8 +30,11 @@ public class App {
             System.out.println("3. Número de partidas según fechas");
             System.out.println("4. Insertar jugador en una partida");
             System.out.println("5. Eliminar jugador");
-            System.out.println("6. SALIR");
-            System.out.println("Introducir opción (1-6): ");
+            System.out.println("6. Mostrar Accesos");
+            System.out.println("7. Nivel Partida");
+            System.out.println("8. Eliminar Partida");
+            System.out.println("9. SALIR");
+            System.out.println("Introducir opción (1-7): ");
             op = sc.nextInt();
 
             switch (op) {
@@ -90,7 +93,23 @@ public class App {
                     break;
 
                 case 6:
+                    dao.mostrarAcceso();
+
                     break;
+
+                case 7:
+                    System.out.print("Introducir fecha inicio (YYYY-MM-DD): ");
+                    Date finicio1 = Date.valueOf(sc.next());
+                    System.out.print("Introducir fecha final (YYYY-MM-DD): ");
+                    Date ffin1 = Date.valueOf(sc.next());
+
+                    System.out.println("Nivel: " + dao.nivelPartidas(finicio1, ffin1));
+
+                    break;
+
+                case 8:
+                case 9:
+                break;
                 default:
                     System.out.println("Opción errónea");
             }

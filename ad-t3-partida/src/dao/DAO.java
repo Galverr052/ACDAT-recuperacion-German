@@ -13,4 +13,7 @@ public interface DAO {
         int contabilizarNumPartidas(Date finicio, Date ffin);
         List<Acceso> insertarAcceso(Jugador jugador, Partida partida);
         boolean eliminarJugador(Jugador jugador);
+        void mostrarAcceso();
+        int nivelPartidas(Date finicio, Date ffin);
+        int elimminarPartidasIncompletas();
 }

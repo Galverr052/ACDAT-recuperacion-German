@@ -206,4 +206,57 @@ public class DAOImpl implements DAO{
         }
         return vreturn;
     }
+
+    public void mostrarAcceso() {
+        Connection c;
+        String sql = "{CALL MOSTRAR_ACCESOS_POR_JUGADOR()}";
+        try {
+            c= Conexion.getConnection();
+
+            CallableStatement callableStatement = c.prepareCall(sql);
+            callableStatement.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int nivelPartidas(Date finicio, Date ffin){
+        Connection c;
+        int numpartidas = 1;
+        String sql = "{? = call num_partidas(?,?)}";
+
+        try {
+            c =Conexion.getConnection();
+
+            CallableStatement callableStatement = c.prepareCall(sql);
+            callableStatement.registerOutParameter(1, Types.INTEGER);
+            callableStatement.setDate(2, finicio);
+            callableStatement.setDate(3, ffin);
+            callableStatement.execute();
+            numpartidas = callableStatement.getInt(1);
+            if (numpartidas < 0){
+                numpartidas = 0;
+            }
+            if (numpartidas > 0 && numpartidas <=4){
+                numpartidas = 0;
+            }
+
+            Conexion.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return numpartidas;
+    }
+
+    public int elimminarPartidasIncompletas() {
+        return 0;
+    }
+
 }

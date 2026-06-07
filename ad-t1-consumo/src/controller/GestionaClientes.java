@@ -29,20 +29,20 @@ public class GestionaClientes {
                 String line;
                 while ((line = br.readLine()) != null) {
                     //Si comineza con # se omite
-                    if (line.startsWith("#")) { // No realizar instrucciones de continue, remodificar la estructura
-                        continue;
-                    }
-                    //Obtengo los datos del csv por partes separadas por el punto y coma
-                    String[] data = line.split(";");
-                    if (data.length == 4) {
-                        //optengo los cups que son el primer dato
-                        String cups = data[0];
-                        //y obtengo el kwh que son el cuarto en el csv
-                        float kwh = Float.parseFloat(data[3]);
-                        //Busca los cups y les añade los kwh
-                        consumoPorCups.put(cups, consumoPorCups.getOrDefault(cups, 0f) + kwh);
-                    } else {
-                        System.err.println("Error de conversión");
+                    if (!line.startsWith("#")) { // No realizar instrucciones de continue, remodificar la estructura
+
+                        //Obtengo los datos del csv por partes separadas por el punto y coma
+                        String[] data = line.split(";");
+                        if (data.length == 4) {
+                            //optengo los cups que son el primer dato
+                            String cups = data[0];
+                            //y obtengo el kwh que son el cuarto en el csv
+                            float kwh = Float.parseFloat(data[3]);
+                            //Busca los cups y les añade los kwh
+                            consumoPorCups.put(cups, consumoPorCups.getOrDefault(cups, 0f) + kwh);
+                        } else {
+                            System.err.println("Error de conversión");
+                        }
                     }
                 }
                 //cierro el buffer reader
@@ -185,15 +185,16 @@ public class GestionaClientes {
                 BufferedReader br = new BufferedReader(new FileReader(fcontadores));
                 String line;
 
-                while ((line = br.readLine()) != null){
-                    if (line.startsWith("#")){
-                        continue;  // No realizar instrucciones de continue, remodificar la estructura
-                    }
+                while ((line = br.readLine()) != null) {
+                    if (!line.startsWith("#")) {
+                        // No realizar instrucciones de continue, remodificar la estructura
 
-                    String[] data = line.split(";");
-                    if (data.length == 7){
-                        String nif = data[0];
-                        contadoresCliente.put(nif,contadoresCliente.getOrDefault(nif,0)+1);
+
+                        String[] data = line.split(";");
+                        if (data.length == 7) {
+                            String nif = data[0];
+                            contadoresCliente.put(nif, contadoresCliente.getOrDefault(nif, 0) + 1);
+                        }
                     }
                 }
                 br.close();
@@ -211,19 +212,20 @@ public class GestionaClientes {
                 String line;
                 while ((line = br.readLine()) != null) {
 
-                    if (line.startsWith("#")) {
-                        continue;  // No realizar instrucciones de continue, remodificar la estructura
-                    }
+                    if (!line.startsWith("#")) {
+                        // No realizar instrucciones de continue, remodificar la estructura
 
-                    String[] data = line.split(";");
 
-                    if (data.length == 4) {
+                        String[] data = line.split(";");
 
-                        String nif = data[0];
+                        if (data.length == 4) {
 
-                        int numContadores = contadoresCliente.getOrDefault(nif, 0);
+                            String nif = data[0];
 
-                        pw.println(nif + ": " + numContadores);
+                            int numContadores = contadoresCliente.getOrDefault(nif, 0);
+
+                            pw.println(nif + ": " + numContadores);
+                        }
                     }
                 }
                 br.close();
@@ -265,26 +267,28 @@ public class GestionaClientes {
 
                 while ((line = br.readLine()) != null) {
 
-                    if (line.startsWith("#")) {
-                        continue;  // No realizar instrucciones de continue, remodificar la estructura
-                    }
+                    if (!line.startsWith("#")) {
+                        // No realizar instrucciones de continue, remodificar la estructura
 
-                    String[] data = line.split(";");
 
-                    if (data.length == 4) {
-                        String nif = data[0];
-                        Date fechaAlta = new SimpleDateFormat("dd/MM/yyyy").parse(data[1]);
-                        String nombre = data[2];
-                        String apellido = data[3];
+                        String[] data = line.split(";");
 
-                        Cliente cliente = new Cliente(nif,nombre,apellido,fechaAlta,new ArrayList<>());
-                        for (Contador c : contadores) { 
-                            if (c.getNif().equals(nif)) {
-                                cliente.addContador(c);
+                        if (data.length == 4) {
+                            String nif = data[0];
+                            Date fechaAlta = new SimpleDateFormat("dd/MM/yyyy").parse(data[1]);
+                            String nombre = data[2];
+                            String apellido = data[3];
+
+                            Cliente cliente = new Cliente(nif, nombre, apellido, fechaAlta, new ArrayList<>());
+                            for (Contador c : contadores) {
+                                if (c.getNif().equals(nif)) {
+                                    cliente.addContador(c);
+
+                                }
                             }
-                        }
 
-                        oos.writeObject(cliente);
+                            oos.writeObject(cliente);
+                        }
                     }
                 }
 
