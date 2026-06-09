@@ -34,7 +34,7 @@ public class App {
             System.out.println("7. Nivel Partida");
             System.out.println("8. Eliminar Partida");
             System.out.println("9. SALIR");
-            System.out.println("Introducir opción (1-7): ");
+            System.out.println("Introducir opción (1-9): ");
             op = sc.nextInt();
 
             switch (op) {
@@ -95,6 +95,8 @@ public class App {
                 case 6:
                     dao.mostrarAcceso();
 
+                    System.out.println("Se ha ejecutado Mostrar Acceso");
+
                     break;
 
                 case 7:
@@ -108,6 +110,8 @@ public class App {
                     break;
 
                 case 8:
+                    logTag.log(Level.INFO, "Acción consultada: " + "ELIMINAR PARTIDA");
+                    System.out.println("partidas incompletas eliminadas: "  + dao.elimminarPartidasIncompletas());
                 case 9:
                 break;
                 default:

@@ -216,6 +216,7 @@ public class DAOImpl implements DAO{
             CallableStatement callableStatement = c.prepareCall(sql);
             callableStatement.execute();
 
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -237,11 +238,17 @@ public class DAOImpl implements DAO{
             callableStatement.setDate(3, ffin);
             callableStatement.execute();
             numpartidas = callableStatement.getInt(1);
-            if (numpartidas < 0){
+            if (numpartidas < 5){
                 numpartidas = 0;
             }
-            if (numpartidas > 0 && numpartidas <=4){
-                numpartidas = 0;
+            if (numpartidas >= 5 && numpartidas <= 10){
+                numpartidas = 1;
+            }
+            if (numpartidas >= 11 && numpartidas <= 20){
+                numpartidas = 2;
+            }
+            if (numpartidas > 20){
+                numpartidas = 3;
             }
 
             Conexion.close();
@@ -256,7 +263,51 @@ public class DAOImpl implements DAO{
     }
 
     public int elimminarPartidasIncompletas() {
-        return 0;
+        Connection c = null;
+        int partidasElimanadas = 0;
+
+        String sql1 = "SELECT idpartida FROM acceso WHERE fhsalida IS NULL";
+        String sql2 = "{ call eliminar_partida(?)}";
+        try {
+            c = Conexion.getConnection();
+            c.setAutoCommit(false);
+            
+            Statement statement = c.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql1);
+            
+            CallableStatement callableStatement = c.prepareCall(sql2);
+
+            while (resultSet.next()){
+                int idPartida = resultSet.getInt("IDPARTIDA");
+                
+                callableStatement.setInt(1,idPartida);
+                callableStatement.execute();
+                
+                partidasElimanadas++;
+            }
+            c.commit();
+
+        } catch (SQLException e) {
+            if (c != null){
+                try {
+                    c.rollback();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if(c != null){
+                try {
+                    c.setAutoCommit(true);
+                    Conexion.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return partidasElimanadas;
     }
 
 }
